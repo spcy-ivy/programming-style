@@ -6,6 +6,7 @@ i like:
 
 # tabs vs spaces
 
+tabs because: 
 1. single character
 2. configurable
 
@@ -52,7 +53,7 @@ why?
 2. justify your abstractions before using them, if you cant justify them then they should not be added
 3. you need to iron out some technical details sometimes
 
-code docs should only be used to justify why something exists, never to explain what it does
+function documentation should only be used to justify why something exists, never to explain what it does
 
 # file structure
 
