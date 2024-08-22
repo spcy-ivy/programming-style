@@ -1,90 +1,64 @@
-# why make a programming style
+# why a style guide?
 
-i like consistency
-
-i like when code structured good
-
-i hate when code is structured bad
+i like:
+1. consistency
+2. file structure
 
 # tabs vs spaces
 
-we use tabs in this household
-
-1. its one character so i can just do `x` instead of `dw`
-2. i dont give a damn if it looks the same for everybody just configure your tab width and call it a day
+1. single character
+2. configurable
 
 # indents
 
-i dont like to put more than three indents in any of my files
-
-thats why i make my tab width 8 characters in my editor
-
-if theres over 3 indents separate it or guard clause it whatever you people do
+1. i make my tab width 8 characters
+2. i HATE going over 3 tabs
+3. i like my code structured as a cooking recipe
 
 # casing
 
-PascalCase for types
-
-snake_case for everything else
-
-i also like snake_case for my files
-
-why snake_case? it looks really different from the commonly used PascalCase so we can separate our stuff from our types and default instances/libraries
-
-i also just think it looks nice
+1. PascalCase for types
+2. snake_case for everything else, including filenames
+3. chose those two because they look very different
+4. chose snake case as primary because it just looks nice to me :)... and because its easy to tell if words are supposed to be spaced
 
 # naming
 
-no single letter names, unless there like complicated equations or something then just specify its math and which math thing youre using
-
-if you want to make a constant then do what google does and put a `k_` before the variable name
-
-past tense for booleans (no need for is{present tense})
-
-present tense for everything else
-
-full words
+1. no single letter names unless its math
+2. constants must have `k_` prefix (like google)
+3. past tense for booleans
+4. full words (if conflicting with library then have a commonly used shortening)
 
 # comments
 
-at the top of the file 
+at the top of files:
 
 ```luau
 --[[
     filename.luau
 
     credits
+
     justification for why this module/abstraction exists
 
     other details
+
+    { note: dont describe what module does, name and types should make it self explanatory }
 ]]
 ```
 
-try not to describe what the module does, the name/types should make that self explanatory
+why?
+1. top comments just look nice i picked it up from the emacs users
+2. justify your abstractions before using them, if you cant justify them then they should not be added
+3. you need to iron out some technical details sometimes
 
-why add the top comment?
+code docs should only be used to justify why something exists, never to explain what it does
 
-1. it looks cool
-2. sometimes i have no idea why a certain abstraction is there, you gotta prove it isnt unnecessary
-3. i also just like some juicy details
+# file structure
 
-names of variables/functions should be self explanatory, only use documentation/moonwave style comment to justify why the module/abstraction exists
+no singleton type architecture
 
-# programming paradigm
-
-we use imperative programming in this household
-
-object oriented programming and functional programming hurt my brain
-
-youre not banned from using the other two styles, but make sure theyre confined to their individual module and you have a justification for why youre using it
-
-# script structure
-
-we're not doing that thing where its a single script calling a bunch of other scripts and their methods
-
-this is just going to be a normal programming structure where its a small bundle of server scripts and client scripts that may have a few modules inside
-
-NOT what we're gonna do
+NOT what we're doing:
 ```
 server
 +
@@ -95,7 +69,7 @@ server
 |-- datastores.luau
 ```
 
-what we're gonna do
+what we're doing: 
 ```
 server
 +
@@ -105,24 +79,41 @@ server
 |- datastores.luau
 ```
 
+i dont have a particularly intelligent reason for why i dont use the singleton architecture,,,, i just dont like it and never found a use case for it
+
 # modules
 
-this is how i style my modules!
+start with C-style function headers (maybe with some shared variables and constants too)
+
+why?
+1. im impatient and want to get the details of an abstraction ASAP
+2. its like psuedo documentation
 
 ```luau
 --[[
     chef.luau
 
-    sudo make me a sandwich
+    anyone can cook
 ]]
 
 type ChefModule = {
     k_energy: number,
     make_sandwich: (tip: number) -> boolean
 }
+```
+define constants and initial variables
 
+```luau
 local k_energy = 10
+```
 
+FULLY TYPED functions
+
+why?
+1. when you jump to it on your lsp you get all the details without looking at the header type
+2. appeases the LSP
+
+```luau
 local function make_sandwich(tip: number): boolean
     if k_energy + tip < 5 then
         print("no i dont wanna")
@@ -136,53 +127,40 @@ local function make_sandwich(tip: number): boolean
 
     return true
 end
+```
 
-return {
+gather your children
+
+why?
+1. when you give it the type directly the LSP is more strict with its properties complying with the given types
+2. you can introduce some changes and mutability afterward if need be
+
+```luau
+local chef_module: ChefModule = {
     k_energy = 10,
     make_sandwich = make_sandwich
-} :: ChefModule
+}
+
+return chef_module
 ```
+
+if it seems weird... thats because it is...
+
+its how i like making my modules though, so im going to keep doing it
 
 # metatables
 
-i dont believe in metatables
-
-they just... disturb me... they come off as hacky
-
-im sure theyre loveable in some way... but i would just prefer not to use them... i hope you understand :(
+1. i dont like to use them at all
+2. no smart reason for this either, they just irk me :(
 
 # classes
 
-we take [mr. sleitnicks approach for this one](https://www.youtube.com/watch?v=-E_L6-Yo8yQ)
+we use [imperative approach](https://www.youtube.com/watch?v=-E_L6-Yo8yQ), not much else to it :)
 
-```luau
-export type Person = {
-    first_name: string,
-    last_name: string,
-    age: number,
-    pets: number
-}
+# conclusion
 
-type PersonModule = {
-    give_pet: (person: Person, amount: number) -> ()
-}
-
---- cuz we gotta see how happy theyd be
-local function give_pet(person: Person, amount: number)
-    person.pets += amount
-end
-
-return {
-    give_pet = give_pet
-} :: PersonModule
-```
-
-# process
-
-only abstract when you need to, no premature abtractions please :(
-
-i dont like dependencies... i have no intellectual reason why they just give me the jeepers
-
-# thank you
+1. my programs should look like cookie recipes and you should be able to follow them in a linear fashion
+2. from the prerequisite information given by the names, header comments, and header types, you should be able to understand the purpose of an abstraction immediately
+3. changes to programming structure and function should be justified with doc comments
 
 thank you for reading :^)
