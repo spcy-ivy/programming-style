@@ -1,9 +1,7 @@
 = ivy's personal programming sensibilities :)
 
 to get a lot of writing out of the way, i like
-
 https://www.kernel.org/doc/html/v4.10/process/coding-style.html[the linux kernel coding style]
-
 , so i will be stealing from it:
 
 that means:
