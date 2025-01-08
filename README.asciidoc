@@ -1,0 +1,161 @@
+= ivy's personal programming sensibilities :)
+
+to get a lot of writing out of the way, i like
+
+https://www.kernel.org/doc/html/v4.10/process/coding-style.html[the linux kernel coding style]
+
+, so i will be stealing from it:
+
+that means:
+
+* 8 char tabs
+* 80 column lim
+* no spaces in parenthesized exps
+* concise names when possible
+* name importance/len determined by scope
+* comments for purpose, not behavior!
+* no comments INSIDE blocks
+** exceptions are made if you want some silliness
+* i do not care about grammatical correctness or professionalism, so if you ever
+ decide to contribute code feel free to let loose!
+
+my stylua config also explains it all in a concise manner!:
+
+[source,toml]
+----
+column_width = 80
+line_endings = "Unix"
+indent_type = "Tabs"
+indent_width = 8
+quote_style = "AutoPreferDouble"
+call_parentheses = "Always"
+collapse_simple_statement = "Never"
+
+[sort_requires]
+enabled = true
+----
+
+= funny formalities
+
+i just add these for fun, not much else
+
+== header
+
+i take this from the emacs lisp folk! this is just the place to reiterate the
+file name and add some additional cheeky commentary
+
+it's mostly for aesthetics, but youre free to add an author name, extra
+commentary, credits, etc.
+
+BUT NEVER LICENSES!!! I LIKE MY CODE PUBLIC DOMAIN AND HASSLE FREE :)
+
+[source,luau]
+----
+--[[
+	example.luau
+
+	ivy, 20XX
+
+	other credits other credits
+
+	this script doesn't have a purpose yet,,, GIVE IT ONE!
+
+	extra commentary extra commentary
+
+	joke joke
+]]
+----
+
+== snake case
+
+i just prefer snake case... it feels right...
+
+and it coincedentally distinguishes my own code from roblox's std lib!
+
+this is good for passing off as a logical reason when someone inevitably gets on
+my ass about it...
+
+types stay PascalCase though!! it feels wrong when they arent!!
+
+== constants
+
+there are a million ways to format constants, and i think the capital formatting
+is just fine!
+
+it just... looks wrong for me
+
+which is why i use google's 'k_' prefix!
+
+AND, IMPORTANT CAVEAT:
+
+we only apply this prefix to PRIMITIVE TYPES, no services, instances, all that
+shit, we arent touching those values anyways
+
+[source,luau]
+----
+local I_DONT_LIKE_THIS = ":("
+local k_i_like_this = ":)"
+----
+
+= serious business
+
+== modules
+
+the way i handle modules is a little weird
+
+[source,luau]
+----
+type ExampleModule = {
+	reduce: <T>(x: { T }, modify: (x: T) -> ()) -> { T }
+	flatten: <T>(x: { T }) -> { T },
+	print: <T>(x: { T }) -> { T },
+}
+
+local function reduce<T>(x: { T }, modify: (x: T) -> ()): { T }
+	-- ...
+end
+
+--[[
+	...
+	other function definitions
+	...
+]]
+
+local example_module: ExampleModule = {
+	reduce = reduce,
+	flatten = flatten,
+	print = print,
+}
+
+return example_module
+----
+
+why do i do this?
+
+* the type declarations on top just give me an instant preview of what the
+ module does, no further reading necessary
+* all functions need to have ALL of their types explicitly defined IN
+ EXCRUCIATING detail so that if you want to scrutinize a specific function
+ you dont have to scroll all the way up to the type definitions
+* the separated var at the bottom is NECESSARY alongside the explicit type
+ declaration so that any discrepancies are caught by the analyzer
+
+== anonymous functions
+
+i prefer to use anon funcs whenever possible, and only deviate from them when
+it makes code go over 3 indents or just makes the formatter freak out
+
+== NO METATABLES
+
+i personally think they are very hacky and abstract WAYYY too much from the user
+
+i just DO NOT like modifying the behavior of the programming language itself
+
+== object oriented programming
+
+THAT ALSO DOES NOT MEAN THE USUAL WAY TO IMPLEMENT OBJECT ORIENTED PROGRAMMING
+
+im just not an OOP person... so i opt for passing self explicitly
+
+refer to https://www.youtube.com/watch?v=-E_L6-Yo8yQ[sleitnick's explanation]
+for more detail
